@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
+             x:Class="StepProgressBarSample.Carrusel"
+             xmlns:local="clr-namespace:StepProgressBarSample" 
+             xmlns:control="clr-namespace:StepProgressBarSample;assembly=StepProgressBarSample"
+             x:Name="page">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!--Female template-->
+            <DataTemplate x:Key="FeMaleTemplate">
+                <StackLayout BackgroundColor="Pink" Orientation="Horizontal">
+                    <Image Source="{Binding ImageUri}" VerticalOptions="Center"
+                           Margin="50,0,0,0" WidthRequest="100" HeightRequest="200" />
+                    <Label VerticalOptions="Center" Margin="60,0,0,0" Text="{Binding Name}" 
+                           TextColor="Black" FontSize="30" />
+                </StackLayout>
+            </DataTemplate>
+            <!--Male template-->
+            <DataTemplate x:Key="MaleTemplate">
+                <Grid BackgroundColor="Aqua">
+                    <Image Source="{Binding ImageUri}" VerticalOptions="Start" 
+                           Margin="00,50,0,0" WidthRequest="100" HeightRequest="200" />
+                    <Label VerticalOptions="Center" HorizontalOptions="Center" 
+                           Margin="0,500,0,0" Text="{Binding Name}" TextColor="Black" FontSize="30" />
+                </Grid>
+            </DataTemplate>
+            <!--Template selector-->
+            <control:CarouselTemplateSelector x:Key="CarouselTemplateSelector" 
+                                              MaleTemplate="{StaticResource MaleTemplate}" 
+                                              FemaleTemplate="{StaticResource FeMaleTemplate}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout>
+        <StackLayout Padding="10,40">
+            <!--<local:StepProgressBarControlText  StepColor="#D6D4D4" Steps="{Binding persons.Count}" StepSelected="0" x:Name="stepBar" >
+            </local:StepProgressBarControlText>-->
+             <local:StepProgressBarControl  StepColor="#D6D4D4" Steps="{Binding persons.Count}" StepSelected="0" x:Name="stepBar" >
+            </local:StepProgressBarControl>
+            <Label BindingContext="{x:Reference stepBar}"
+               Text="{Binding StepSelected, StringFormat='The Step Selected is {0}'}"
+               FontAttributes="Bold"
+               FontSize="Large"
+               HorizontalOptions="Center"
+               VerticalOptions="CenterAndExpand" />
+        </StackLayout>
+        <cards:CarouselView 
+            x:Name="MyCarouselView"  
+            ItemsSource="{Binding persons}"
+            HorizontalOptions="Center" VerticalOptions="CenterAndExpand" Margin="10"
+            SelectedIndex="{Binding Source={x:Reference stepBar}, Path=StepSelected} "
+            ItemTemplate="{StaticResource CarouselTemplateSelector}" >
+         </cards:CarouselView>
+       <!--<CarouselView x:Name="MyCarouselView"  
+                      ItemTemplate="{StaticResource CarouselTemplateSelector}" 
+                      ItemsSource="{Binding persons}"
+                      TabIndex="{Binding Source={x:Reference stepBar}, Path=StepSelected}"
+                      HorizontalOptions="Center" VerticalOptions="CenterAndExpand" Margin="10">
+                <CarouselView.ItemsLayout>
+                    <GridItemsLayout Orientation="Horizontal" 
+                                     SnapPointsAlignment="Center" 
+                                     SnapPointsType="Mandatory"/>
+                </CarouselView.ItemsLayout>
+         </CarouselView>-->
+    </StackLayout>
+</ContentPage>
